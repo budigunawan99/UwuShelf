@@ -10,27 +10,102 @@
     <link rel="icon" href="./assets/uwulogo.ico" />
     <title>UwuShelf</title>
     <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/responsive.css" />
   </head>
 
   <body>
     <div class="wrapper">
       <header class="header">
-        <div class="header_inner">
-            <img
-              class="img_logo"
-              src="./assets/img/uwulogo.png"
-              alt="logo UwuShelf"
-              width="50"
-              height="50"
-            />
-          <h1 class="header_title">UwuShelf</h1>
-        </div>
+        <img
+          class="brand_logo"
+          src="./assets/img/uwulogo.png"
+          alt="logo UwuShelf"
+          width="35"
+          height="35"
+        />
+        <h1 class="header_title">UwuShelf</h1>
       </header>
 
-      <main id="main_content"></main>
+      <main id="main_content">
+        <div class="content_wrapper">
+          <section id="section_add" class="card">
+            <div class="section_header">
+              <h2 class="section_title">Add Book</h2>
+            </div>
+            <div class="section_content">
+              <form id="form_add">
+                <div class="form_group">
+                  <label for="title">Title</label>
+                  <input type="text" id="title" name="title" required />
+                </div>
+                <div class="form_group">
+                  <label for="writer">Writer</label>
+                  <input type="text" id="writer" name="Writer" required />
+                </div>
+                <div class="form_group">
+                  <label for="year">Year</label>
+                  <input
+                    type="number"
+                    id="year"
+                    name="year"
+                    min="1900"
+                    max="2022"
+                    step="1"
+                    required
+                  />
+                </div>
+                <div class="form_group">
+                  <label for="is_finished">Finish Reading</label>
+                  <input type="checkbox" id="is_finished" name="is_finished" />
+                </div>
+
+                <button id="submit">Submit</button>
+              </form>
+            </div>
+          </section>
+
+          <div class="content_action">
+            <section id="section_search" class="card">
+              <div class="section_header">
+                <h2 class="section_title">Search Book</h2>
+              </div>
+              <div class="section_content">
+                <form id="form_search">
+                  <input
+                    type="search"
+                    id="search"
+                    name="search"
+                    placeholder="Type title of book ..."
+                  />
+                  <button id="btn_search">
+                    <i class="material-icons" aria-hidden="true">search</i>
+                  </button>
+                </form>
+              </div>
+            </section>
+
+            <div class="content_store">
+              <section id="section_not_finished" class="card">
+                <div class="section_header">
+                  <h2 class="section_title">Not Finished Book</h2>
+                </div>
+                <div class="section_content"></div>
+              </section>
+              <section id="section_finished" class="card">
+                <div class="section_header">
+                  <h2 class="section_title">Finished Book</h2>
+                </div>
+                <div class="section_content"></div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
 
-    <footer-nav></footer-nav>
+    <footer>
+      <p>Copyright &#169; 2022 - UwuShelf</p>
+    </footer>
     <script src="./js/script.js" type="text/javascript"></script>
   </body>
 </html>

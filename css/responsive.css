@@ -1,0 +1,15 @@
+/* Responsive css */
+
+@media screen and (min-width: 750px) {
+  #main_content .content_wrapper {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-column-gap: 30px;
+  }
+
+  .content_store {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 30px;
+  }
+}
