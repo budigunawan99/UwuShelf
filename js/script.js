@@ -6,6 +6,7 @@ const ACTION = {
   INSERT: "insert_book",
   REMOVE: "remove_book",
   IS_FINISHED: "is_finished_book",
+  SEARCH: "search_book",
 };
 
 const generateId = () => +new Date();
@@ -47,7 +48,72 @@ const loadDataFromStorage = () => {
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
 
-const renderBook = () => {};
+const renderBook = ({ id, title, writer, year, isFinished }) => {
+  const bookTitle = document.createElement("h3");
+  bookTitle.innerText = title;
+
+  const bookWriter = document.createElement("p");
+  bookWriter.innerText = `Author: ${writer}`;
+
+  const bookYear = document.createElement("p");
+  bookYear.innerText = `Year: ${year}`;
+
+  const containerLeft = document.createElement("div");
+  containerLeft.classList.add("article_left");
+  containerLeft.append(bookTitle, bookWriter, bookYear);
+
+  const isFinishedButton = document.createElement("button");
+  isFinishedButton.classList.add(
+    isFinished ? "not_finished_button" : "finished_button"
+  );
+  isFinishedButton.innerHTML = `
+    <i class="material-icons">
+      ${isFinished ? "undo" : "check"}
+    </i> 
+  `;
+  isFinishedButton.addEventListener("click", () =>
+    setBook({
+      id: id,
+      type: ACTION.IS_FINISHED,
+    })
+  );
+
+  const removeButton = document.createElement("button");
+  removeButton.classList.add("remove_button");
+  removeButton.innerHTML = `
+    <i class="material-icons">
+      delete
+    </i> 
+  `;
+  removeButton.addEventListener("click", () => {
+    setBook({
+      id: id,
+      type: ACTION.REMOVE,
+    });
+  });
+
+  const containerRight = document.createElement("div");
+  containerRight.classList.add("article_right");
+  containerRight.append(isFinishedButton, removeButton);
+
+  const container = document.createElement("article");
+  container.classList.add("card");
+  container.append(containerLeft, containerRight);
+  container.setAttribute("id", `book_${id}`);
+
+  return container;
+};
+
+const renderNotification = (message) => {
+  const messageElement = document.createElement("p");
+  messageElement.innerText = message;
+
+  const messageContainer = document.createElement("div");
+  messageContainer.append(messageElement);
+  messageContainer.classList.add("notification");
+
+  return messageContainer;
+};
 
 const setBook = (action) => {
   switch (action.type) {
@@ -57,11 +123,13 @@ const setBook = (action) => {
         title: document.getElementById("title").value,
         writer: document.getElementById("writer").value,
         year: document.getElementById("year").value,
-        isFinished: document.getElementById("is_finished").value,
+        isFinished: document.getElementById("is_finished").checked,
       });
       books.push(bookObject);
       document.dispatchEvent(new Event(RENDER_EVENT));
       saveData();
+      const submitForm = document.getElementById("form_add");
+      submitForm.reset();
       break;
 
     case ACTION.IS_FINISHED:
@@ -84,16 +152,39 @@ const setBook = (action) => {
           return true;
         }
       });
+      break;
+
+    case ACTION.SEARCH:
+      const keyword = document.getElementById("search").value.toLowerCase();
+      const searchedBook = books.filter(
+        (book) => book.title.toLowerCase() === keyword
+      );
+      document.dispatchEvent(
+        new CustomEvent(RENDER_EVENT, {
+          detail: { type: ACTION.SEARCH, data: JSON.stringify(searchedBook) },
+        })
+      );
+      const searchForm = document.getElementById("form_search");
+      searchForm.reset();
   }
 };
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
   const submitForm = document.getElementById("form_add");
-  submitForm.addEventListener("submit", function (event) {
+  submitForm.addEventListener("submit", (event) => {
     event.preventDefault();
     setBook({
       id: null,
       type: ACTION.INSERT,
+    });
+  });
+
+  const searchForm = document.getElementById("form_search");
+  searchForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    setBook({
+      id: null,
+      type: ACTION.SEARCH,
     });
   });
 
@@ -103,7 +194,41 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener(SAVED_EVENT, () => {
-  console.log("Data berhasil di simpan.");
+  console.log(books);
 });
 
-document.addEventListener(RENDER_EVENT, function () {});
+document.addEventListener(RENDER_EVENT, (event) => {
+  const notFinishedBook = document.getElementById("not_finished_book");
+  const finishedBook = document.getElementById("finished_book");
+
+  notFinishedBook.innerHTML = "";
+  finishedBook.innerHTML = "";
+
+  let booksForShow = null;
+  if (event.detail?.type === ACTION.SEARCH) {
+    booksForShow = JSON.parse(event.detail.data);
+  } else {
+    booksForShow = books;
+  }
+
+  console.log(booksForShow);
+
+  booksForShow.forEach((book) => {
+    const bookListItem = renderBook(book);
+    if (book.isFinished) {
+      finishedBook.append(bookListItem);
+    } else {
+      notFinishedBook.append(bookListItem);
+    }
+  });
+
+  if (notFinishedBook.innerHTML === "") {
+    notFinishedBook.append(
+      renderNotification("No data found in not finished books")
+    );
+  }
+
+  if (finishedBook.innerHTML === "") {
+    finishedBook.append(renderNotification("No data found in finished books"));
+  }
+});

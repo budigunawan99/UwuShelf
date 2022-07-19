@@ -12,4 +12,16 @@
     grid-template-columns: 1fr 1fr;
     grid-column-gap: 30px;
   }
+
+  .content_store article .article_right {
+    grid-template-columns: 1fr;
+    grid-column-gap: 5px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .content_store article .article_right {
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 5px;
+  }
 }

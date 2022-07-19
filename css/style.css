@@ -76,6 +76,11 @@ header {
   overflow: hidden;
   color: #180e12;
   background-color: #fff;
+  height: fit-content;
+}
+
+p {
+  font-size: 14px;
 }
 
 form#form_add {
@@ -105,6 +110,11 @@ form#form_search #btn_search {
 
 .section_content {
   padding: 5%;
+}
+
+.section_header {
+  margin-left: 5%;
+  margin-right: 5%;
 }
 
 .section_title {
@@ -158,9 +168,50 @@ button#submit:hover {
   background-color: #fcdde8;
 }
 
-button#btn_search {
+button#btn_search,
+button.not_finished_button,
+button.finished_button,
+button.remove_button {
   background-color: transparent;
 }
+
+.notification {
+  background-color: #fcdde8;
+  padding: 2%;
+  border-radius: 10px;
+}
+
+.notification p {
+  font-style: italic;
+  text-align: center;
+}
+
+.content_store article {
+  padding: 2% 6%;
+  background-color: #fef4f7;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-column-gap: 5px;
+  align-items: center;
+}
+
+.content_store article p,
+.content_store article h3 {
+  margin: 0;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.content_store article h3 {
+  font-weight: bold;
+}
+
+.content_store article .article_right {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 5px;
+}
+
 /*
  * Footer
  *
