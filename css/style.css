@@ -213,6 +213,71 @@ button.remove_button {
 }
 
 /*
+ * Dialog
+ *
+ */
+
+.dialog_overlay {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(24, 14, 18, 0.5);
+  padding-top: 50px;
+}
+
+.dialog {
+  box-shadow: 0 4px 8px 0 rgba(52, 73, 94, 0.2);
+  border-radius: 10px;
+  overflow: hidden;
+  color: #180e12;
+  background-color: #fff;
+  width: 25%;
+  min-width: 265px;
+  margin: auto;
+  padding: 2%;
+  text-align: center;
+}
+
+.dialog h2,
+.dialog p {
+  margin: 0;
+}
+
+.dialog h2 {
+  font-size: 1.5em;
+}
+
+.dialog .dialog_action {
+  margin-top: 10%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 10px;
+}
+
+button.btn_cancel,
+button.btn_delete {
+  border-radius: 15px;
+}
+
+button.btn_delete {
+  background-color: #f33636;
+  padding: 10px 0;
+  box-shadow: 0 4px 8px 0 rgba(52, 73, 94, 0.2);
+  opacity: 0.8;
+  transition: 0.5s linear;
+  color: #fef4f7;
+}
+
+button.btn_delete:hover {
+  opacity: 1;
+}
+
+/*
  * Footer
  *
  */

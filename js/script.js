@@ -1,6 +1,5 @@
 const books = [];
 const RENDER_EVENT = "render-book";
-const SAVED_EVENT = "saved-book";
 const STORAGE_KEY = "UWUSHELF_APPS";
 const ACTION = {
   INSERT: "insert_book",
@@ -31,7 +30,6 @@ function saveData() {
   if (isStorageExist()) {
     const parsed = JSON.stringify(books);
     localStorage.setItem(STORAGE_KEY, parsed);
-    document.dispatchEvent(new Event(SAVED_EVENT));
   }
 }
 
@@ -86,10 +84,17 @@ const renderBook = ({ id, title, writer, year, isFinished }) => {
     </i> 
   `;
   removeButton.addEventListener("click", () => {
-    setBook({
-      id: id,
-      type: ACTION.REMOVE,
-    });
+    document.getElementById("dialog_delete").style.display = "block";
+
+    const dialogDeleteButton = document.querySelector(".btn_delete");
+
+    dialogDeleteButton.onclick = () => {
+      setBook({
+        id: id,
+        type: ACTION.REMOVE,
+      });
+      document.getElementById("dialog_delete").style.display = "none";
+    };
   });
 
   const containerRight = document.createElement("div");
@@ -156,9 +161,9 @@ const setBook = (action) => {
 
     case ACTION.SEARCH:
       const keyword = document.getElementById("search").value.toLowerCase();
-      const searchedBook = books.filter(
-        (book) => book.title.toLowerCase() === keyword
-      );
+      const searchedBook = keyword
+        ? books.filter((book) => book.title.toLowerCase() === keyword)
+        : books;
       document.dispatchEvent(
         new CustomEvent(RENDER_EVENT, {
           detail: { type: ACTION.SEARCH, data: JSON.stringify(searchedBook) },
@@ -188,13 +193,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  const cancelRemoveButton = document.querySelector(".btn_cancel");
+  cancelRemoveButton.addEventListener("click", () => {
+    document.getElementById("dialog_delete").style.display = "none";
+  });
+
   if (isStorageExist()) {
     loadDataFromStorage();
   }
-});
-
-document.addEventListener(SAVED_EVENT, () => {
-  console.log(books);
 });
 
 document.addEventListener(RENDER_EVENT, (event) => {
@@ -210,8 +216,6 @@ document.addEventListener(RENDER_EVENT, (event) => {
   } else {
     booksForShow = books;
   }
-
-  console.log(booksForShow);
 
   booksForShow.forEach((book) => {
     const bookListItem = renderBook(book);
